@@ -84,7 +84,6 @@ concierto(mikuFest, argentina, 100, pequenio(4)).
 
 
 
-
 %2 
 puedeParticipar(Cantante, NombreConcierto):-
     cantante(Cantante),
@@ -151,20 +150,18 @@ famaTotal(Nombre, FamaTotal):-
 famaConcierto(Concierto, Fama):- concierto(Concierto, _, Fama, _).
 
 
-
-/* famaTotal2(Nombre, FamaTotal):-  
+/*
+ famaTotal2(Nombre, FamaTotal):-  
     %cantante(Nombre), %agrego para inversible
-    findall(
-        Concierto,
-        (puedeParticipar(Nombre, Concierto), concierto(Concierto, _, Fama, _)) ,
-        Conciertos),
+    findall(Concierto,  (puedeParticipar(Nombre, Concierto), concierto(Concierto, _, Fama, _)),    Conciertos),
     list_to_set(Conciertos, ConciertosSinRepetir),
     sumaDeFamas(ConciertosSinRepetir, FamaTotal).
 
-sumaDeFamas([Concierto | OtrosConciertos], FamaTotal):-
-    famaConcierto(Concierto, Fama),
-    FamaTotal is 0 + FamaTotal + Fama,
-    sumaDeFamas(OtrosConciertos, FamaTotal).
+
+sumaDeFamas(Conciertos, FamaTotal):-
+    member(Concierto, Conciertos),
+    findall(Fama, famaConcierto(Concierto, Fama), Famas).
+    sum_list(Famas, FamaTotal).
 
 sumaDeFamas([], 0).
 sumaDeFamas([_], 1).*/  
@@ -173,8 +170,35 @@ sumaDeFamas([_], 1).*/
 /*Sabemos que:
 
 Queremos verificar si un vocaloid es el único que participa de un concierto, esto se cumple si ninguno de sus conocidos ya sea directo o indirectos (en cualquiera de los niveles) participa en el mismo concierto.*/
+conoce(megurineLuka, hatsuneMiku).
+conoce(megurineLuka, gumi).
+conoce(gumi, seeU).
+conoce(seeU, kaito).
+
+unicoEnConcierto(Cantante, Concierto):-
+    puedeParticipar(Cantante, Concierto),
+    forall(
+        conocidos(Cantante,OtroCantante),
+        not(puedeParticipar(OtroCantante, Concierto))
+    ).
+
+%unicoEnConcierto2(Cantante, Concierto):-
+%    puedeParticipar(Cantante, Concierto),
+%    conocidos(Cantante, Conocido),
+%    Conocido \= Cantante,
+%    not(puedeParticipar(Conocido, Concierto)).
 
 
 
+
+conocidos(Cantante,OtroCantante):-      %directos
+    conoce(Cantante,OtroCantante).
+
+conocidos(Cantante, OtroCantante):-     %indirectos
+    conoce(Cantante,Tercero),
+    conocidos(Tercero, OtroCantante).
+
+
+   
 
 %----------------------------------PUNTO 4 ----------------------------------%
