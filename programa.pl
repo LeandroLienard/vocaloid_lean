@@ -174,17 +174,7 @@ sumaDeFamas([_], 1).*/
 
 Queremos verificar si un vocaloid es el único que participa de un concierto, esto se cumple si ninguno de sus conocidos ya sea directo o indirectos (en cualquiera de los niveles) participa en el mismo concierto.*/
 
-conoce(megurineLuka, hatsuneMiku).
-conoce(megurineLuka, gumi).
-conoce(gumi, seeU).
-conoce(seeU, kaito).
-
-unicoEnConcierto(Cantante):-
-    forall(conoce(Cantante,OtroCantante),not(conoceDirectaOIndirectamente(Cantante,OtroCantante))).
 
 
-
-%% VILLA: este punto me hace acordar al parcial que resolvi a la mañana ver solucion: PARCIAL LA CARCEL
-% PD: MANDAME WPP CUANDO VUELVAS!!!! 1168113981 <3
 
 %----------------------------------PUNTO 4 ----------------------------------%
